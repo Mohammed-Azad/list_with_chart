@@ -6,7 +6,14 @@ import 'package:list_with_chart/Transaction.dart';
 import './Transaction.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MaterialApp(
+    home: MyApp(),
+    debugShowCheckedModeBanner: false,
+    theme: ThemeData(
+      colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      useMaterial3: true,
+    ),
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -36,14 +43,73 @@ class _MyAppState extends State<MyApp> {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text("ListWithChart"),
+          title: Text("Expenses App"),
+          actions: [
+            IconButton(
+                icon: const Icon(Icons.add_rounded),
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Container(
+                        height: 300,
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextField(
+                                decoration: InputDecoration(labelText: "Title"),
+                                controller: titlecontroler,
+                                textInputAction: TextInputAction.next,
+                              ),
+                              TextField(
+                                decoration:
+                                    InputDecoration(labelText: "Amount"),
+                                controller: amountcontroler,
+                                textInputAction: TextInputAction.done,
+                                keyboardType: TextInputType.number,
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(top: 10),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.deepPurple,
+                                    foregroundColor: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    if (amountcontroler.text != "0") {
+                                      try {
+                                        setState(() {
+                                          transactions.add(
+                                            Transaction(
+                                                id: (transactions.length + 1)
+                                                    .toString(),
+                                                amount: double.parse(
+                                                    amountcontroler.text),
+                                                date: DateTime.now(),
+                                                title: titlecontroler.text),
+                                          );
+                                        });
+                                        amountcontroler.clear();
+                                        titlecontroler.clear();
+                                      } catch (e) {}
+                                    }
+                                  },
+                                  child: Text("Add Transactions"),
+                                ),
+                              ),
+                            ]),
+                      );
+                    },
+                  );
+                }),
+          ],
         ),
         body: SingleChildScrollView(
-          
           child: Column(children: [
             Container(
               width: double.infinity,
-              height: 50,
               child: Container(
                 child: Text("chart in here "),
                 margin: EdgeInsets.all(5),
@@ -51,58 +117,6 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
             Container(
-              padding: EdgeInsets.all(5),
-              child: Card(
-                elevation: 5,
-                child: Container(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextField(
-                          decoration: InputDecoration(labelText: "Title"),
-                          controller: titlecontroler,
-                        ),
-                        TextField(
-                          decoration: InputDecoration(labelText: "Amount"),
-                          controller: amountcontroler,
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 10),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.deepPurple,
-                              foregroundColor: Colors.white,
-                            ),
-                            onPressed: () {
-                              if (amountcontroler.text != "0") {
-                                try {
-                                  setState(() {
-                                    transactions.add(
-                                      Transaction(
-                                          id: (transactions.length + 1)
-                                              .toString(),
-                                          amount: double.parse(
-                                              amountcontroler.text),
-                                          date: DateTime.now(),
-                                          title: titlecontroler.text),
-                                    );
-                                  });
-                                  amountcontroler.clear();
-                                  titlecontroler.clear();
-                                } catch (e) {}
-                              }
-                            },
-                            child: Text("Add Transactions"),
-                          ),
-                        ),
-                      ]),
-                ),
-              ),
-            ),
-            Container(
-              height: 300,
               child: SingleChildScrollView(
                 child: Column(
                   children: transactions.map((e) {
