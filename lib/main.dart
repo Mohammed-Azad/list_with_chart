@@ -30,8 +30,12 @@ class _MyAppState extends State<MyApp> {
   final titlecontroler = TextEditingController();
 
   final amountcontroler = TextEditingController(text: "0");
-
   // This widget is the root of your application.
+  void resetcontroller() {
+    titlecontroler.clear();
+    amountcontroler.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -48,6 +52,7 @@ class _MyAppState extends State<MyApp> {
             IconButton(
                 icon: const Icon(Icons.add_rounded),
                 onPressed: () {
+                  resetcontroller();
                   showModalBottomSheet(
                     context: context,
                     builder: (BuildContext context) {
@@ -64,21 +69,14 @@ class _MyAppState extends State<MyApp> {
                                 textInputAction: TextInputAction.next,
                               ),
                               TextField(
-                                decoration:
-                                    InputDecoration(labelText: "Amount"),
-                                controller: amountcontroler,
-                                textInputAction: TextInputAction.done,
-                                keyboardType: TextInputType.number,
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(top: 10),
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.deepPurple,
-                                    foregroundColor: Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    if (amountcontroler.text != "0") {
+                                  decoration:
+                                      InputDecoration(labelText: "Amount"),
+                                  controller: amountcontroler,
+                                  textInputAction: TextInputAction.done,
+                                  keyboardType: TextInputType.number,
+                                  onSubmitted: (value) {
+                                    if (amountcontroler.text != "0" &&
+                                        !titlecontroler.text.isEmpty) {
                                       try {
                                         setState(() {
                                           transactions.add(
@@ -91,8 +89,34 @@ class _MyAppState extends State<MyApp> {
                                                 title: titlecontroler.text),
                                           );
                                         });
-                                        amountcontroler.clear();
-                                        titlecontroler.clear();
+                                      } catch (e) {}
+
+                                      Navigator.of(context).pop();
+                                    }
+                                  }),
+                              Container(
+                                margin: EdgeInsets.only(top: 10),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.deepPurple,
+                                    foregroundColor: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    if (amountcontroler.text != "0" &&
+                                        !titlecontroler.text.isEmpty) {
+                                      try {
+                                        setState(() {
+                                          transactions.add(
+                                            Transaction(
+                                                id: (transactions.length + 1)
+                                                    .toString(),
+                                                amount: double.parse(
+                                                    amountcontroler.text),
+                                                date: DateTime.now(),
+                                                title: titlecontroler.text),
+                                          );
+                                        });
+                                        resetcontroller();
                                       } catch (e) {}
                                     }
                                   },
@@ -110,10 +134,13 @@ class _MyAppState extends State<MyApp> {
           child: Column(children: [
             Container(
               width: double.infinity,
-              child: Container(
-                child: Text("chart in here "),
-                margin: EdgeInsets.all(5),
-                padding: EdgeInsets.only(left: 125),
+              child: SizedBox(
+                height: 15,
+                child: Container(
+                  child: Text("chart in here "),
+                  margin: EdgeInsets.all(5),
+                  padding: EdgeInsets.only(left: 125),
+                ),
               ),
             ),
             Container(
