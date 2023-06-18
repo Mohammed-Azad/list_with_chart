@@ -36,6 +36,7 @@ class _MyAppState extends State<MyApp> {
     amountcontroler.clear();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -47,7 +48,7 @@ class _MyAppState extends State<MyApp> {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Expenses App"),
+          title: Text("Expenses App",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.deepPurple[300]),),
           actions: [
             IconButton(
                 icon: const Icon(Icons.add_rounded),
@@ -57,12 +58,14 @@ class _MyAppState extends State<MyApp> {
                     context: context,
                     builder: (BuildContext context) {
                       return Container(
-                        height: 300,
+                        height: 400,
                         padding: EdgeInsets.all(10),
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
+                              SizedBox(height: 20,),
+                              Center(child: Text("Add Expense",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.deepPurple[400]),),),
                               TextField(
                                 decoration: InputDecoration(labelText: "Title"),
                                 controller: titlecontroler,
@@ -148,6 +151,7 @@ class _MyAppState extends State<MyApp> {
                 child: Column(
                   children: transactions.map((e) {
                     return Card(
+                      
                       child: ListTile(
                         title: Text(
                           e.title,
@@ -155,6 +159,7 @@ class _MyAppState extends State<MyApp> {
                               fontWeight: FontWeight.bold,
                               color: Colors.deepPurple),
                         ),
+                        
                         subtitle: Text(
                           e.date.toString(),
                           style: TextStyle(fontWeight: FontWeight.w300),
