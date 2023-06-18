@@ -1,5 +1,6 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:list_with_chart/Transaction.dart';
 import './Transaction.dart';
@@ -38,6 +39,7 @@ class _MyAppState extends State<MyApp> {
           title: Text("ListWithChart"),
         ),
         body: SingleChildScrollView(
+          
           child: Column(children: [
             Container(
               width: double.infinity,
@@ -70,8 +72,8 @@ class _MyAppState extends State<MyApp> {
                           margin: EdgeInsets.only(top: 10),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.deepPurple,
-                            foregroundColor: Colors.white,
+                              backgroundColor: Colors.deepPurple,
+                              foregroundColor: Colors.white,
                             ),
                             onPressed: () {
                               if (amountcontroler.text != "0") {
@@ -99,25 +101,32 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
             ),
-            Scrollbar(
-              child: Column(
-                children: transactions.map((e) {
-                  return Card(
-                    child: ListTile(
-                      title: Text(
-                        e.title,
-                        style: TextStyle(fontWeight: FontWeight.bold,color: Colors.deepPurple),
-                      ),
-                      subtitle: Text(
-                        e.date.toString(),
-                        style: TextStyle(fontWeight: FontWeight.w300),
-                      ),
-                      trailing: Text("\$${e.amount.toString()}",
+            Container(
+              height: 300,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: transactions.map((e) {
+                    return Card(
+                      child: ListTile(
+                        title: Text(
+                          e.title,
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16,color: Colors.deepPurple)),
-                    ),
-                  );
-                }).toList(),
+                              fontWeight: FontWeight.bold,
+                              color: Colors.deepPurple),
+                        ),
+                        subtitle: Text(
+                          e.date.toString(),
+                          style: TextStyle(fontWeight: FontWeight.w300),
+                        ),
+                        trailing: Text("\$${e.amount.toString()}",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: Colors.deepPurple)),
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
             )
           ]),
