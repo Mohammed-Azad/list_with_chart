@@ -1,9 +1,8 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:intl/intl.dart';
 import 'package:list_with_chart/Transaction.dart';
-import './Transaction.dart';
+import './chart.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -36,6 +35,15 @@ class _MyAppState extends State<MyApp> {
     amountcontroler.clear();
   }
 
+  List<Transaction> get _recentTransaction {
+    return transactions.where((tx) {
+      return tx.date.isAfter(
+        DateTime.now().subtract(
+          Duration(days: 7),
+        ),
+      );
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +56,11 @@ class _MyAppState extends State<MyApp> {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Expenses App",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.deepPurple[300]),),
+          title: Text(
+            "Expenses App",
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.deepPurple[300]),
+          ),
           actions: [
             IconButton(
                 icon: const Icon(Icons.add_rounded),
@@ -64,8 +76,18 @@ class _MyAppState extends State<MyApp> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              SizedBox(height: 20,),
-                              Center(child: Text("Add Expense",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.deepPurple[400]),),),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Center(
+                                child: Text(
+                                  "Add Expense",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                      color: Colors.deepPurple[400]),
+                                ),
+                              ),
                               TextField(
                                 decoration: InputDecoration(labelText: "Title"),
                                 controller: titlecontroler,
@@ -138,11 +160,10 @@ class _MyAppState extends State<MyApp> {
             Container(
               width: double.infinity,
               child: SizedBox(
-                height: 15,
+                height: 150,
                 child: Container(
-                  child: Text("chart in here "),
+                  child: Chart(_recentTransaction),
                   margin: EdgeInsets.all(5),
-                  padding: EdgeInsets.only(left: 125),
                 ),
               ),
             ),
@@ -151,7 +172,6 @@ class _MyAppState extends State<MyApp> {
                 child: Column(
                   children: transactions.map((e) {
                     return Card(
-                      
                       child: ListTile(
                         title: Text(
                           e.title,
@@ -159,7 +179,6 @@ class _MyAppState extends State<MyApp> {
                               fontWeight: FontWeight.bold,
                               color: Colors.deepPurple),
                         ),
-                        
                         subtitle: Text(
                           e.date.toString(),
                           style: TextStyle(fontWeight: FontWeight.w300),
