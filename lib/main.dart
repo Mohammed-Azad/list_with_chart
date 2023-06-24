@@ -22,8 +22,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   List<Transaction> transactions = [
-    Transaction(id: "0", title: "Mouse", amount: 5, date: DateTime.now()),
-    Transaction(id: "1", title: "keyboard", amount: 20, date: DateTime.now())
   ];
 
   final titlecontroler = TextEditingController();
@@ -160,7 +158,7 @@ class _MyAppState extends State<MyApp> {
             Container(
               width: double.infinity,
               child: SizedBox(
-                height: 150,
+                height: 200,
                 child: Container(
                   child: Chart(_recentTransaction),
                   margin: EdgeInsets.all(5),
